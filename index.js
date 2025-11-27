@@ -17,14 +17,14 @@ const ai = new GoogleGenAI({ apiKey: "AIzaSyAb1V5elNmxWKiJ0WEsJD-gPxgqNwUZF4w" }
 app.post("/api/gemini/prompt/send", async (req,res)=>{
   const prompt = req.body.prompt;
 
-  if(!prompt){
-    return res.status(400).json({"message": "Please send a valid prompt"})
+  if (!prompt || typeof prompt !== 'string') {
+    return res.status(400).json({ "message": "Please send a valid prompt" });
   }
-  const response = await ai.models.generateContent({
+  const result = await ai.models.generateContent({
     model: "gemini-2.5-flash",
-    contents:prompt,
+    contents: prompt,
   });
-  return res.status(200).json(response);
+  return res.status(200).json({ response: result });
 })
 
 app.listen(port, () => {
